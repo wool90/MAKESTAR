@@ -42,27 +42,18 @@ export default class AppleMusicDomain {
         return JSON.parse(response);
     }
 
-    public async findExactSong(songName: string, isrc: string): Promise<IAppleMusicSongDetailData | null> {
-        const response = await this.search('US', songName, [SearchTypes.SONGS]);
-        let songs = response.results.songs?.data || [];
-        let exactMatch = songs.find((song) => song.attributes.isrc === isrc);
-        let nextUrl = response.results.songs?.next;
+    public async findExactSong(isrc: string): Promise<IAppleMusicSongDetailData | null> {
+        const response = await got.get(`${this.baseUrl}/v1/catalog/us/songs`, {
+            headers: {
+                Authorization: `Bearer ${this.token}`,
+            },
+            searchParams: {
+                'filter[isrc]': isrc,
+            },
+            resolveBodyOnly: true,
+        });
 
-        if (exactMatch) {
-            return exactMatch;
-        }
-
-        while (nextUrl) {
-            const nextResponse = await this.requestByPath(nextUrl);
-            songs = nextResponse.results.songs?.data || [];
-            exactMatch = songs.find((song) => song.attributes.isrc === isrc);
-            nextUrl = nextResponse.results.songs?.next;
-
-            if (exactMatch) {
-                return exactMatch;
-            }
-        }
-
-        return null;
+        const detail = JSON.parse(response);
+        return detail.data.pop();
     }
 }
