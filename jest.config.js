@@ -5,8 +5,8 @@ module.exports = {
     preset: 'ts-jest',
     modulePaths: ['src'],
     transform: {
-      '^.+\\.tsx?$': ['ts-jest', {
-        isolatedModules: true,
-      }],
+        '^.+\\.tsx?$': ['ts-jest', {
+            isolatedModules: true,
+        }],
     },
-  };
+};

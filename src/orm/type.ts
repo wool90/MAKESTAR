@@ -1,7 +1,4 @@
-export enum ServiceType {
-    Spotify = 'spotify',
-    AppleMusic = 'appleMusic',
-}
+import { ServiceType } from './constants';
 
 export interface ArtWorkInfo {
     url: string;

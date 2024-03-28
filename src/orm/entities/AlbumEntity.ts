@@ -9,6 +9,7 @@ import {
     OneToMany,
 } from 'typeorm';
 
+import { AlbumType } from 'orm/constants';
 import { ArtWorkInfo } from 'orm/type';
 
 import { ArtistEntity } from './ArtistEntity';
@@ -41,14 +42,18 @@ export class AlbumEntity {
     @Column({ nullable: true })
     appleMusicId: string;
 
-    @Column({ default: false })
+    @Column({ default: true })
     isPlayable: boolean;
 
     @Column({ nullable: true })
     popularity: number;
 
-    @Column({ nullable: true })
-    type: string;
+    @Column({
+        type: 'varchar',
+        enum: AlbumType,
+        default: AlbumType.Album,
+    })
+    type: AlbumType;
 
     @Column({ type: 'jsonb', default: [] })
     artworkList: ArtWorkInfo[];
