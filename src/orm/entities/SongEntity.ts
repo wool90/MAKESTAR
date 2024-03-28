@@ -22,6 +22,9 @@ export class SongEntity {
     @Column()
     name: string;
 
+    @Column({ unique: true })
+    isrc: string;
+
     @ManyToOne(() => AlbumEntity, (album) => album.songs)
     @JoinColumn()
     album: AlbumEntity;

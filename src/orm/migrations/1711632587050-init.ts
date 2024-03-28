@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Init1711612342972 implements MigrationInterface {
-    name = 'Init1711612342972';
+export class Init1711632587050 implements MigrationInterface {
+    name = 'Init1711632587050';
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(
-            `CREATE TABLE "song" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "duration" integer NOT NULL, "popularity" integer NOT NULL, "genres" jsonb NOT NULL DEFAULT '[]', "explicit" boolean NOT NULL DEFAULT false, "discNumber" integer NOT NULL, "trackNumber" integer NOT NULL, "spotifyId" character varying, "appleMusicId" character varying, "isPlayable" boolean NOT NULL DEFAULT false, "isLocal" boolean NOT NULL DEFAULT false, "availableMarkets" jsonb NOT NULL DEFAULT '[]', "additionalInfo" jsonb NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "albumId" integer, CONSTRAINT "PK_baaa977f861cce6ff954ccee285" PRIMARY KEY ("id"))`
+            `CREATE TABLE "song" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "isrc" character varying NOT NULL, "duration" integer NOT NULL, "popularity" integer NOT NULL, "genres" jsonb NOT NULL DEFAULT '[]', "explicit" boolean NOT NULL DEFAULT false, "discNumber" integer NOT NULL, "trackNumber" integer NOT NULL, "spotifyId" character varying, "appleMusicId" character varying, "isPlayable" boolean NOT NULL DEFAULT false, "isLocal" boolean NOT NULL DEFAULT false, "availableMarkets" jsonb NOT NULL DEFAULT '[]', "additionalInfo" jsonb NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), "albumId" integer, CONSTRAINT "UQ_8af2a89396bf685396ee6e4c027" UNIQUE ("isrc"), CONSTRAINT "PK_baaa977f861cce6ff954ccee285" PRIMARY KEY ("id"))`
         );
         await queryRunner.query(`CREATE INDEX "IDX_1cdadc2cd4977bf206354f0dee" ON "song" ("spotifyId") `);
         await queryRunner.query(`CREATE INDEX "IDX_a0679a88255aa401dc672aa729" ON "song" ("appleMusicId") `);
@@ -14,7 +14,7 @@ export class Init1711612342972 implements MigrationInterface {
             `CREATE TABLE "artist" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "spotifyId" character varying, "appleMusicId" character varying, "imageUrl" character varying, "popularity" integer, "type" character varying, "additionalInfo" jsonb NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_55b76e71568b5db4d01d3e394ed" PRIMARY KEY ("id"))`
         );
         await queryRunner.query(
-            `CREATE TABLE "album" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "releaseDate" TIMESTAMP NOT NULL, "totalTracks" integer NOT NULL, "spotifyId" character varying, "appleMusicId" character varying, "isPlayable" boolean NOT NULL DEFAULT false, "popularity" integer, "type" character varying, "artworkList" jsonb NOT NULL DEFAULT '[]', "additionalInfo" jsonb NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_58e0b4b8a31bb897e6959fe3206" PRIMARY KEY ("id"))`
+            `CREATE TABLE "album" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "releaseDate" TIMESTAMP NOT NULL, "totalTracks" integer NOT NULL, "spotifyId" character varying, "appleMusicId" character varying, "isPlayable" boolean NOT NULL DEFAULT true, "popularity" integer, "type" character varying NOT NULL DEFAULT 'album', "artworkList" jsonb NOT NULL DEFAULT '[]', "additionalInfo" jsonb NOT NULL DEFAULT '{}', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_58e0b4b8a31bb897e6959fe3206" PRIMARY KEY ("id"))`
         );
         await queryRunner.query(
             `CREATE TABLE "playlist" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, "description" character varying, "songIds" jsonb NOT NULL DEFAULT '[]', "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP NOT NULL DEFAULT now(), CONSTRAINT "PK_538c2893e2024fabc7ae65ad142" PRIMARY KEY ("id"))`

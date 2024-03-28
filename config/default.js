@@ -13,4 +13,8 @@ module.exports = {
         migrationsRun: true,
         synchronize: false,
     },
+    appleMusic: {
+        baseUrl: 'https://api.music.apple.com',
+        token: process.env.CONF_APPLE_MUSIC_KEY,
+    },
 };

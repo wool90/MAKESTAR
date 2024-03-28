@@ -5,7 +5,7 @@ import { AlbumEntity, ArtistEntity, SongEntity, PlaylistEntity } from 'orm/entit
 import { ServiceType, AlbumType } from 'orm/constants';
 import { ISpotifyPlaylist, ISpotifyTrack } from 'types/music';
 
-export class SpotifyMigrate1711616146038 implements MigrationInterface {
+export class SpotifyMigrate1711632611991 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {
         const data = fs.readFileSync('src/orm/migrations/spotify_playlist.json', 'utf-8');
         const spotifyData: ISpotifyPlaylist = JSON.parse(data);
@@ -14,13 +14,14 @@ export class SpotifyMigrate1711616146038 implements MigrationInterface {
         const songIds = new Map<string, number>();
 
         for (const songId of spotifyData.spotify_playlist) {
-            const songEntity = await queryRunner.manager.findOne(SongEntity, { where: { spotifyId: songId } });
+            const trackInfo = spotifyData.spotify_track_information[songId] as ISpotifyTrack;
+            const isrc = trackInfo.external_ids.isrc;
+            const songEntity = await queryRunner.manager.findOne(SongEntity, { where: { isrc } });
             if (songEntity) {
                 songIds.set(songId, songEntity.id);
                 continue;
             }
 
-            const trackInfo = spotifyData.spotify_track_information[songId] as ISpotifyTrack;
             for (const artist of trackInfo.artists) {
                 if (!artistMap.has(artist.id)) {
                     const artistEntity = await queryRunner.manager.findOne(ArtistEntity, {
@@ -82,6 +83,7 @@ export class SpotifyMigrate1711616146038 implements MigrationInterface {
             }
 
             const newSong = new SongEntity();
+            newSong.isrc = trackInfo.external_ids.isrc;
             newSong.name = trackInfo.name;
             newSong.album = albumMap.get(trackInfo.album.id);
             newSong.artists = trackInfo.artists.map((artist) => {
@@ -121,20 +123,15 @@ export class SpotifyMigrate1711616146038 implements MigrationInterface {
     public async down(queryRunner: QueryRunner): Promise<void> {
         const data = fs.readFileSync('src/orm/migrations/spotify_playlist.json', 'utf-8');
         const spotifyData: ISpotifyPlaylist = JSON.parse(data);
-        const albumIds = new Set<string>();
-        const artistIds = new Set<string>();
+        const isrcList = new Set<string>();
 
         for (const songId of spotifyData.spotify_playlist) {
             const trackInfo = spotifyData.spotify_track_information[songId] as ISpotifyTrack;
-            for (const artist of trackInfo.artists) {
-                artistIds.add(artist.id);
-            }
-            albumIds.add(trackInfo.album.id);
+            const isrc = trackInfo.external_ids.isrc;
+            isrcList.add(isrc);
         }
 
-        await queryRunner.manager.delete(SongEntity, { spotifyId: In([...spotifyData.spotify_playlist]) });
-        await queryRunner.manager.delete(AlbumEntity, { spotifyId: In([...albumIds]) });
-        await queryRunner.manager.delete(ArtistEntity, { spotifyId: In([...artistIds]) });
+        await queryRunner.manager.delete(SongEntity, { isrc: In([...isrcList]) });
         await queryRunner.manager.delete(PlaylistEntity, { name: 'Default Playlist' });
     }
 }

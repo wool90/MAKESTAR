@@ -1,10 +1,12 @@
 {
   "name": "makestar",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/wool90/MAKESTAR.git",
   "author": "isaac <n.wool90@gmail.com>",
   "license": "MIT",
+  "files": ["dist"],
+  "main": "dist/server",
+  "types": "dist/server.d.ts",
   "scripts": {
     "prettier": "prettier --write './src/**/*.ts'",
     "lint": "tslint -p . -c tslint.json",
@@ -25,6 +27,7 @@
     "class-validator": "^0.14.1",
     "config": "^3.3.11",
     "dotenv": "^16.4.5",
+    "got": "^11.8.1",
     "koa": "^2.15.2",
     "koa-bodyparser": "^4.4.1",
     "koa-router": "^12.0.1",
