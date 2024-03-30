@@ -3,7 +3,7 @@ import * as fs from 'fs';
 
 import { AlbumEntity, ArtistEntity, SongEntity, PlaylistEntity } from 'orm/entities';
 import { ServiceType, AlbumType } from 'orm/constants';
-import { ISpotifyPlaylist, ISpotifyTrack } from 'types/music';
+import { ISpotifyPlaylist, ISpotifyTrack } from 'domains/type';
 
 export class SpotifyMigrate1711632611991 implements MigrationInterface {
     public async up(queryRunner: QueryRunner): Promise<void> {

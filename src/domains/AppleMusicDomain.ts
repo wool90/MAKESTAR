@@ -3,10 +3,10 @@ import * as config from 'config';
 import got from 'got';
 
 import { SearchTypes } from './constants';
-import { IAppleMusicSearchResponse, IAppleMusicSongDetailData, IAppleMusicSearchArtistsResponse } from './type';
+import { IAppleMusicSearchResponse, IAppleMusicSearchArtistsResponse, IAppleMusicSongDetail } from './type';
 
 @Service()
-export default class AppleMusicService {
+export default class AppleMusicDomain {
     private readonly baseUrl: string = config.get('appleMusic.baseUrl');
     private readonly token: string = config.get('appleMusic.token');
     private readonly pageSize: number = 10;
@@ -33,8 +33,8 @@ export default class AppleMusicService {
         return JSON.parse(response);
     }
 
-    public async findByIsrc(isrc: string[]): Promise<IAppleMusicSongDetailData[]> {
-        const result: IAppleMusicSongDetailData[] = [];
+    public async findByIsrc(isrc: string[]): Promise<IAppleMusicSongDetail[]> {
+        const result: IAppleMusicSongDetail[] = [];
         const chunkSize = 25; // Apple Music API limit
 
         for (let i = 0; i < isrc.length; i += chunkSize) {

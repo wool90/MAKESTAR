@@ -4,10 +4,9 @@ import { formatDate } from 'date-fns';
 import { appDataSource } from 'orm';
 import { ServiceType } from 'orm/constants';
 import { PlaylistEntity, SongEntity } from 'orm/entities';
-import { Category } from 'types/constants';
-import { ISpotifyTrack } from 'types/music';
+import { Category } from 'domains/constants';
 
-import { IAppleMusicTrackInformation } from './type';
+import { IAppleMusicTrackInformation, ISpotifyTrack } from './type';
 
 @Service()
 export default class PlaylistDomain {
@@ -49,7 +48,7 @@ export default class PlaylistDomain {
                         data: song.artists.map((artist) => ({
                             id: artist.appleMusicId,
                             href: `/v1/catalog/${countryCode.toLowerCase()}/artists/${artist.appleMusicId}`,
-                            type: 'artists',
+                            type: Category.Artist,
                         })),
                         href: `/v1/catalog/${countryCode.toLowerCase()}/songs/${song.appleMusicId}/artists`,
                     },
@@ -58,7 +57,7 @@ export default class PlaylistDomain {
                             {
                                 id: song.album.appleMusicId,
                                 href: `/v1/catalog/${countryCode.toLowerCase()}/albums/${song.album.appleMusicId}`,
-                                type: 'albums',
+                                type: Category.Album,
                             },
                         ],
                         href: `/v1/catalog/${countryCode.toLowerCase()}/songs/${song.appleMusicId}/albums`,
@@ -73,7 +72,7 @@ export default class PlaylistDomain {
         };
     }
 
-    private convertSpotifyFormat(songList: SongEntity[], countryCode: string) {
+    private convertSpotifyFormat(songList: SongEntity[]) {
         const spotifyIds = songList.map((song) => song.spotifyId);
         const trackInfo: { [key: string]: ISpotifyTrack } = {};
 
@@ -172,6 +171,6 @@ export default class PlaylistDomain {
             return this.convertAppleMusicFormat(filteredList, countryCode);
         }
 
-        return this.convertSpotifyFormat(filteredList, countryCode);
+        return this.convertSpotifyFormat(filteredList);
     }
 }

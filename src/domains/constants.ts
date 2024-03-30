@@ -1,3 +1,9 @@
+export enum Category {
+    Album = 'album',
+    Track = 'track',
+    Artist = 'artist',
+}
+
 export enum SearchTypes {
     ALBUMS = 'albums',
     ARTISTS = 'artists',

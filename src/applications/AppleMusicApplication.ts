@@ -1,14 +1,14 @@
 import { Service, Inject } from 'typedi';
 
 import { ServiceType } from 'orm/constants';
-import AppleMusicService from 'common/AppleMusicService';
+import AppleMusicDomain from 'domains/AppleMusicDomain';
 import SongDomain from 'domains/SongDomain';
 import ArtistDomain from 'domains/ArtistDomain';
 import AlbumDomain from 'domains/AlbumDomain';
 
 @Service()
 export default class AppleMusicApplication {
-    @Inject() private appleMusicService: AppleMusicService;
+    @Inject() private appleMusicDomain: AppleMusicDomain;
     @Inject() private songDomain: SongDomain;
     @Inject() private artistDomain: ArtistDomain;
     @Inject() private albumDomain: AlbumDomain;
@@ -21,7 +21,7 @@ export default class AppleMusicApplication {
 
         const isrcs = songs.map((song) => song.isrc);
         const albumIds = songs.map((song) => song.album.id);
-        const response = await this.appleMusicService.findByIsrc(isrcs);
+        const response = await this.appleMusicDomain.findByIsrc(isrcs);
         const albumNeedUpdate = await this.albumDomain.getNeedUpdateForApple(albumIds);
         const artistIds: string[] = [];
 
@@ -70,7 +70,7 @@ export default class AppleMusicApplication {
         const existArtists = await this.artistDomain.getArtistByAppleMusicIds(artistIds);
         const artistNeedUpdate = artistIds.filter((id) => !existArtists.find((artist) => artist.appleMusicId === id));
         for (const artistId of artistNeedUpdate) {
-            const artistResponse = await this.appleMusicService.findArtistById(artistId);
+            const artistResponse = await this.appleMusicDomain.findArtistById(artistId);
             const artistDetail = artistResponse.data.pop();
             if (artistDetail) {
                 const artistEntity = await this.artistDomain.searchArtistByName(artistDetail.attributes.name);
