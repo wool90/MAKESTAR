@@ -4,7 +4,9 @@
   "repository": "https://github.com/wool90/MAKESTAR.git",
   "author": "isaac <n.wool90@gmail.com>",
   "license": "MIT",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "dist/server",
   "types": "dist/server.d.ts",
   "scripts": {
@@ -26,6 +28,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "config": "^3.3.11",
+    "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "got": "^11.8.1",
     "koa": "^2.15.2",

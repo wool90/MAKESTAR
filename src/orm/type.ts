@@ -5,6 +5,11 @@ export interface IArtWorkInfo {
     width: number;
     height: number;
     service: ServiceType;
+    bgColor?: string;
+    textColor1?: string;
+    textColor2?: string;
+    textColor3?: string;
+    textColor4?: string;
 }
 
 export interface IAdditionalInfo {

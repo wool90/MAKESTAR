@@ -1,5 +1,6 @@
 import { Service, Inject } from 'typedi';
 
+import { ServiceType } from 'orm/constants';
 import AppleMusicService from 'common/AppleMusicService';
 import SongDomain from 'domains/SongDomain';
 import ArtistDomain from 'domains/ArtistDomain';
@@ -35,6 +36,7 @@ export default class AppleMusicApplication {
                     playParams: detail.attributes.playParams,
                     previews: detail.attributes.previews,
                     url: detail.attributes.url,
+                    href: detail.href,
                 };
                 await this.songDomain.updateAppleInfo(song.id, detail.id, song.additionalInfo);
 
@@ -44,7 +46,16 @@ export default class AppleMusicApplication {
                     albumTarget.additionalInfo.appleMusic = {
                         href: albumData.href,
                     };
-                    await this.albumDomain.updateAppleInfo(albumTarget.id, albumData.id, albumTarget.additionalInfo);
+                    albumTarget.artworkList.push({
+                        ...detail.attributes.artwork,
+                        service: ServiceType.AppleMusic,
+                    }),
+                        await this.albumDomain.updateAppleInfo(
+                            albumTarget.id,
+                            albumData.id,
+                            albumTarget.artworkList,
+                            albumTarget.additionalInfo
+                        );
                 }
 
                 artistIds.push(...detail.relationships.artists.data.map((artist) => artist.id));

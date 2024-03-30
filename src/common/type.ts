@@ -57,11 +57,11 @@ export interface IAppleMusicArtwork {
     width: number;
     height: number;
     url: string;
-    bgColor: string;
-    textColor1: string;
-    textColor2: string;
-    textColor3: string;
-    textColor4: string;
+    bgColor?: string;
+    textColor1?: string;
+    textColor2?: string;
+    textColor3?: string;
+    textColor4?: string;
 }
 
 export interface IAppleMusicArtistData {
@@ -128,7 +128,7 @@ export interface IAppleMusicSongAttributes {
     durationInMillis: number;
     isrc: string;
     artwork: IAppleMusicArtwork;
-    composerName: string;
+    composerName?: string;
     playParams: {
         id: string;
         kind: string;
