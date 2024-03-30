@@ -26,7 +26,12 @@ export default class AppleMusicApplication {
         const artistIds: string[] = [];
 
         for (const song of songs) {
-            const detail = response.find((item) => item.attributes.isrc === song.isrc);
+            const detail = response.find((item) => {
+                return (
+                    item.attributes.isrc === song.isrc &&
+                    item.attributes.albumName.toLowerCase().indexOf(song.album.name.toLowerCase()) > -1
+                );
+            });
             if (detail) {
                 song.additionalInfo.appleMusic = {
                     genreNames: detail.attributes.genreNames,

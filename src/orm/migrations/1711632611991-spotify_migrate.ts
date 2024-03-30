@@ -11,13 +11,13 @@ export class SpotifyMigrate1711632611991 implements MigrationInterface {
         const spotifyData: ISpotifyPlaylist = JSON.parse(data);
         const albumMap = new Map<string, AlbumEntity>();
         const artistMap = new Map<string, ArtistEntity>();
-        const songIds = new Map<string, number>();
+        const songIds: number[] = [];
 
         for (const songId of spotifyData.spotify_playlist) {
             const trackInfo = spotifyData.spotify_track_information[songId] as ISpotifyTrack;
             const songEntity = await queryRunner.manager.findOne(SongEntity, { where: { spotifyId: trackInfo.id } });
             if (songEntity) {
-                songIds.set(songId, songEntity.id);
+                songIds.push(songEntity.id);
                 continue;
             }
 
@@ -119,13 +119,13 @@ export class SpotifyMigrate1711632611991 implements MigrationInterface {
                 .relation(ArtistEntity, 'songs')
                 .of(newSong.artists)
                 .add(newSong);
-            songIds.set(songId, newSong.id);
+            songIds.push(newSong.id);
         }
 
         const playlistEntity = new PlaylistEntity();
         playlistEntity.name = 'Default Playlist';
         playlistEntity.description = 'Default playlist for all songs';
-        playlistEntity.songIds = [...songIds.values()];
+        playlistEntity.songIds = songIds;
         await queryRunner.manager.save(playlistEntity);
     }
 
