@@ -103,7 +103,7 @@ export default class PlaylistDomain {
                     total_tracks: song.album.totalTracks,
                     images: song.album.artworkList.filter((art) => art.service === ServiceType.Spotify),
                     album_type: song.album.type,
-                    artists: song.album.artists.map((artist) => ({
+                    artists: song.artists.map((artist) => ({
                         id: artist.spotifyId,
                         name: artist.name,
                         uri: artist.additionalInfo.spotify?.uri,
@@ -136,7 +136,7 @@ export default class PlaylistDomain {
         };
     }
 
-    public async getPlaylistById(playlistId: number, countryCode: string, service: ServiceType) {
+    public async getPlaylistById(playlistId: number, countryCode: string, service: ServiceType, availableOnly = false) {
         const playlist = await this.playlistRepository.findOne({
             where: {
                 id: playlistId,
@@ -151,8 +151,11 @@ export default class PlaylistDomain {
             .createQueryBuilder('song')
             .innerJoinAndSelect('song.album', 'album')
             .innerJoinAndSelect('song.artists', 'artist')
-            .where('song.id IN (:...songIds)', { songIds: playlist.songIds })
-            .andWhere('song.availableMarkets @> :countryCode', { countryCode: `["${countryCode}"]` });
+            .where('song.id IN (:...songIds)', { songIds: playlist.songIds });
+
+        if (availableOnly) {
+            query.andWhere('song.availableMarkets @> :countryCode', { countryCode: `["${countryCode}"]` });
+        }
 
         if (service === ServiceType.AppleMusic) {
             query.andWhere('song.appleMusicId IS NOT NULL');

@@ -15,8 +15,7 @@ export class SpotifyMigrate1711632611991 implements MigrationInterface {
 
         for (const songId of spotifyData.spotify_playlist) {
             const trackInfo = spotifyData.spotify_track_information[songId] as ISpotifyTrack;
-            const isrc = trackInfo.external_ids.isrc;
-            const songEntity = await queryRunner.manager.findOne(SongEntity, { where: { isrc } });
+            const songEntity = await queryRunner.manager.findOne(SongEntity, { where: { spotifyId: trackInfo.id } });
             if (songEntity) {
                 songIds.set(songId, songEntity.id);
                 continue;

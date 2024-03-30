@@ -24,7 +24,7 @@ export class SongEntity {
     @Column()
     name: string;
 
-    @Column({ unique: true })
+    @Column()
     isrc: string;
 
     @ManyToOne(() => AlbumEntity, (album) => album.songs)
