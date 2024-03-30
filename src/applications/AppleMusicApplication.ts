@@ -64,6 +64,9 @@ export default class AppleMusicApplication {
                 }
 
                 artistIds.push(...detail.relationships.artists.data.map((artist) => artist.id));
+            } else {
+                // notification to slack, email, etc...
+                console.log(`Not found: ${song.isrc}`);
             }
         }
 

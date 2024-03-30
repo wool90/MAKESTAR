@@ -6,7 +6,7 @@ import { ServiceType } from 'orm/constants';
 import { PlaylistEntity, SongEntity } from 'orm/entities';
 import { Category } from 'domains/constants';
 
-import { IAppleMusicTrackInformation, ISpotifyTrack } from './type';
+import { IAppleMusicTrack, ISpotifyTrack } from './type';
 
 @Service()
 export default class PlaylistDomain {
@@ -15,13 +15,13 @@ export default class PlaylistDomain {
 
     private convertAppleMusicFormat(songList: SongEntity[], countryCode: string) {
         const appleMusicIds = songList.map((song) => song.appleMusicId);
-        const trackInfo: { [key: string]: IAppleMusicTrackInformation } = {};
+        const trackInfo: { [key: string]: IAppleMusicTrack } = {};
 
         for (const song of songList) {
             trackInfo[song.appleMusicId] = {
                 id: song.appleMusicId,
                 href: song.additionalInfo.appleMusic?.href,
-                type: 'songs',
+                type: Category.Songs,
                 attributes: {
                     url: song.additionalInfo.appleMusic?.url,
                     isrc: song.isrc,

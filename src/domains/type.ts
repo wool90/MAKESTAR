@@ -2,26 +2,6 @@ import { AlbumType } from 'orm/constants';
 
 import { Category, SearchTypes } from './constants';
 
-export interface IAppleMusicTrackInformation {
-    id: string;
-    href: string;
-    type: string;
-    attributes: IAppleMusicSongAttributes;
-    equivalents: {
-        [key: string]: string;
-    };
-    relationships: {
-        artists: {
-            data: IAppleMusicArtist[];
-            href: string;
-        };
-        albums: {
-            data: IAppleMusicAlbum[];
-            href: string;
-        };
-    };
-}
-
 export interface ISpotifyArtwork {
     url: string;
     width: number;

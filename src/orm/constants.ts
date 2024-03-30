@@ -1,6 +1,6 @@
 export enum ServiceType {
     Spotify = 'spotify',
-    AppleMusic = 'appleMusic',
+    AppleMusic = 'apple_music',
 }
 
 export enum AlbumType {
