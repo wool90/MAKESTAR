@@ -11,6 +11,8 @@ import {
     JoinTable,
 } from 'typeorm';
 
+import { IAdditionalInfo } from 'orm/type';
+
 import { AlbumEntity } from './AlbumEntity';
 import { ArtistEntity } from './ArtistEntity';
 
@@ -70,7 +72,7 @@ export class SongEntity {
     availableMarkets: string[];
 
     @Column({ type: 'jsonb', default: {} })
-    additionalInfo: {};
+    additionalInfo: IAdditionalInfo;
 
     @CreateDateColumn()
     createdAt: Date;

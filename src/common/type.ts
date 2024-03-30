@@ -210,3 +210,7 @@ export interface IAppleMusicSearchResponse {
         };
     };
 }
+
+export interface IAppleMusicSearchArtistsResponse {
+    data: IAppleMusicArtistDetailData[];
+}

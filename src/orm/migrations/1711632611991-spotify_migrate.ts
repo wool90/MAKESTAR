@@ -76,6 +76,11 @@ export class SpotifyMigrate1711632611991 implements MigrationInterface {
                         },
                     };
                     await queryRunner.manager.save(newAlbum);
+                    await queryRunner.manager
+                        .createQueryBuilder()
+                        .relation(ArtistEntity, 'albums')
+                        .of(newAlbum.artists)
+                        .add(newAlbum);
                     albumMap.set(trackInfo.album.id, newAlbum);
                 } else {
                     albumMap.set(trackInfo.album.id, albumEntity);
@@ -110,6 +115,11 @@ export class SpotifyMigrate1711632611991 implements MigrationInterface {
             };
 
             await queryRunner.manager.save(newSong);
+            await queryRunner.manager
+                .createQueryBuilder()
+                .relation(ArtistEntity, 'songs')
+                .of(newSong.artists)
+                .add(newSong);
             songIds.set(songId, newSong.id);
         }
 

@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 
 import { AlbumType } from 'orm/constants';
-import { ArtWorkInfo } from 'orm/type';
+import { IArtWorkInfo, IAdditionalInfo } from 'orm/type';
 
 import { ArtistEntity } from './ArtistEntity';
 import { SongEntity } from './SongEntity';
@@ -56,10 +56,10 @@ export class AlbumEntity {
     type: AlbumType;
 
     @Column({ type: 'jsonb', default: [] })
-    artworkList: ArtWorkInfo[];
+    artworkList: IArtWorkInfo[];
 
     @Column({ type: 'jsonb', default: {} })
-    additionalInfo: {};
+    additionalInfo: IAdditionalInfo;
 
     @CreateDateColumn()
     createdAt: Date;

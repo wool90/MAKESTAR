@@ -8,6 +8,8 @@ import {
     JoinTable,
 } from 'typeorm';
 
+import { IAdditionalInfo } from 'orm/type';
+
 import { AlbumEntity } from './AlbumEntity';
 import { SongEntity } from './SongEntity';
 
@@ -43,7 +45,7 @@ export class ArtistEntity {
     songs: SongEntity[];
 
     @Column({ type: 'jsonb', default: {} })
-    additionalInfo: {};
+    additionalInfo: IAdditionalInfo;
 
     @CreateDateColumn()
     createdAt: Date;
